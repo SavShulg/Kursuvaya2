@@ -1,4 +1,5 @@
 package com.practice.Kursov2.exeptions;
 
-public class NotFoundQuestionsException extends RuntimeException {
+public class NotFoundQuestionsException extends RuntimeException{
+
 }

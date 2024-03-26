@@ -1,18 +1,12 @@
-package com.practice.Kursov2.service;
+package com.practice.Kursov2.repository;
 
 import com.practice.Kursov2.model.Question;
 
 import java.util.Collection;
 
-public interface QuestionService {
-
+public interface QuestionRepository {
     Question add(String question, String answer);
-
     Question add(Question question);
-
     Question remove(Question question);
-
     Collection<Question> getAll();
-
-    Question getRandomQuestion();
 }

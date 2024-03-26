@@ -2,49 +2,44 @@ package com.practice.Kursov2.service;
 
 import com.practice.Kursov2.exeptions.NotEnoughQuestionException;
 import com.practice.Kursov2.model.Question;
-import jdk.internal.org.objectweb.asm.tree.analysis.SourceValue;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
+import java.util.*;
 
 @Service
-public class ExaminerServiceImpl implements ExaminerService {
+public class ExaminerServiceImpl implements ExaminerServise{
+    private final QuestionServise mathServise;
+    private final QuestionServise javaServise;
+    private final Random random = new Random();
 
-    private final ExaminerService questionService;
-
-    public ExaminerServiceImpl(ExaminerService questionService) {
-        this.questionService = questionService;
+    public ExaminerServiceImpl(@Qualifier("java") QuestionServise mathServise,
+                               @Qualifier("math") QuestionServise javaServise) {
+        this.mathServise = mathServise;
+        this.javaServise = javaServise;
     }
 
+
     @Override
-    public Collection<Question> getQuestions(int amount) {
-        var allQuestions = questionService.getAll();
-        if (!(amount <= allQuestions.size)) {
+    public Collection<Question> getQuestion(int amount) {
+
+
+        var allQuestions = new ArrayList<>(mathServise.getAll());
+        allQuestions.addAll(javaServise.getAll());
+
+        if (amount > allQuestions.size()) {
             throw new NotEnoughQuestionException();
         }
-
-        if (amount == allQuestions.size) {
-            return (Collection<Question>) allQuestions;
+        if (amount == allQuestions.size()) {
+            return allQuestions;
         }
 
         Set<Question> questions = new HashSet<>();
         while (questions.size() < amount) {
-            questions.add(questionService.getRandomQuestion());
+            var question = random.nextBoolean() ? mathServise.getRandomQuestion() : javaServise.getRandomQuestion();
+            questions.add(question);
         }
+
         return questions;
-    }
-
-    @Override
-    public SourceValue getAll() {
-        return null;
-    }
-
-    @Override
-    public Question getRandomQuestion() {
-        return null;
     }
 }
