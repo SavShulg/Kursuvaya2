@@ -1,20 +1,20 @@
 package com.practice.Kursov2.service;
 
-
 import com.practice.Kursov2.exeptions.NotFoundQuestionsException;
 import com.practice.Kursov2.model.Question;
 import com.practice.Kursov2.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
-@Service("java")
-public class JavaQuestionService implements QuestionServise {
+import java.util.Collection;
+import java.util.Random;
 
-    private final QuestionRepository repository;
+@Service("math")
+public class MathQuestionServise implements QuestionServise{
     private final Random random = new Random();
+    private final QuestionRepository repository;
 
-    public JavaQuestionService(@Qualifier("javaRepository") QuestionRepository repository) {
+    public MathQuestionServise(@Qualifier("mathRepository") QuestionRepository repository) {
         this.repository = repository;
     }
 
@@ -41,9 +41,6 @@ public class JavaQuestionService implements QuestionServise {
     @Override
     public Question getRandomQuestion() {
         var questions = repository.getAll();
-        if(questions.isEmpty()){
-            throw new NotFoundQuestionsException();
-        }
         var index = random.nextInt(questions.size());
         var i = 0;
         for (Question question : questions) {
@@ -55,4 +52,5 @@ public class JavaQuestionService implements QuestionServise {
         throw new NotFoundQuestionsException();
 
     }
+
 }
